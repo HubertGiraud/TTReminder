@@ -1,17 +1,64 @@
 version: 2.0
 jobs:
-  build:
+  Build:
     docker:
-      - image: alpine:3.7
+      - image: cypress/base:10
+    working_directory: ~/repo
     steps:
       - checkout
+      - restore_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "package.json" }}
       - run:
-          name: The First Step
+          name: Install
           command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
+            npm --version
+            npm ci
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - node_modules
       - run:
-          name: Code has arrived
+          name: Build
           command: |
-            ls -al
-            echo 'My Code is Here'
+            echo 'Building project'
+            npm run build
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./*
+  Test:
+      docker:
+        - image: alipline:3.7
+      working_directory: ~/repo
+      steps:
+        - attach_workspace:
+          at: ./
+        - run:
+            name: test
+            command: |
+              echo 'Testing project'
+              npm run test
+  Lint:
+      docker:
+        - image: alipline:3.7
+      working_directory: ~/repo
+      steps:
+        - attach_workspace:
+          at: ./
+        - run:
+            name: lint
+            command: |
+              echo 'Linting project'
+              npm run lint
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - Build
+      - Test:
+          requires:
+            - Build
+      - Lint:
+          requires:
+            - Build
