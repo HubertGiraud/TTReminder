@@ -1,0 +1,19 @@
+@import "../../utils/variables";
+
+.btn {
+  width: 15em;
+  height: 2.5em;
+
+  border: none;
+  border-radius: 2em;
+
+  color: #ffffff;
+  background-color: $primary-dark;
+
+  font-family: 'Work Sans';
+  font-size: 1.1em;
+}
+
+.btn-disabled {
+  background-color: $very-light-pink;
+}
