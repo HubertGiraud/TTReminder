@@ -27,29 +27,29 @@ jobs:
           paths:
             - ./*
   Test:
-      docker:
-        - image: alipline:3.7
-      working_directory: ~/repo
-      steps:
-        - attach_workspace:
-          at: ./
-        - run:
-            name: test
-            command: |
-              echo 'Testing project'
-              npm run test
+    docker:
+      - image: alipline:3.7
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+        at: ./
+      - run:
+          name: test
+          command: |
+            echo 'Testing project'
+            npm run test
   Lint:
-      docker:
-        - image: alipline:3.7
-      working_directory: ~/repo
-      steps:
-        - attach_workspace:
-          at: ./
-        - run:
-            name: lint
-            command: |
-              echo 'Linting project'
-              npm run lint
+    docker:
+      - image: alipline:3.7
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+        at: ./
+      - run:
+          name: lint
+          command: |
+            echo 'Linting project'
+            npm run lint
 
 workflows:
   version: 2
